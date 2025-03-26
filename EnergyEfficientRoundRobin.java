@@ -1,120 +1,104 @@
 import java.util.*;
 
 public class EnergyEfficientRoundRobin {
+    // Function to determine dynamic time slice based on energy usage
+    public static int getDynamicTimeSlice(int energyUsage) {
+        if (energyUsage <= 2) {
+            return 6; // Low energy usage → Longer time slice (6 units)
+        } else if (energyUsage <= 5) {
+            return 4; // Medium energy usage → Normal time slice (4 units)
+        } else {
+            return 2; // High energy usage → Shorter time slice (2 units)
+        }
+    }
+
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
 
-        // User input for number of processes
+        // Step 1: User input for number of processes and time quantum
         System.out.print("Enter the number of processes: ");
         int n = sc.nextInt();
 
-        // Ask if energy efficiency should be considered
-        System.out.print("Do you want to use Energy Usage? (1 for Yes, 0 for No): ");
-        boolean useEnergy = sc.nextInt() == 1;
-
-        int timeQuantum = 0;
-        if (!useEnergy) {
-            System.out.print("Enter the fixed time quantum: ");
-            timeQuantum = sc.nextInt();
-        }
-
-        // Process properties
-        int[] processId = new int[n];
-        int[] arrivalTime = new int[n];
-        int[] burstTime = new int[n];
-        int[] remainingTime = new int[n];
-        int[] completionTime = new int[n];
-        int[] turnaroundTime = new int[n];
-        int[] waitingTime = new int[n];
-        int[] responseTime = new int[n];
-        int[] energyUsage = new int[n]; // Energy usage (1-10 scale)
+        // Step 2: Arrays for process details
+        int[] Process_id = new int[n];
+        int[] Arrival_time = new int[n];
+        int[] Burst_time = new int[n];
+        int[] Remaining_burst_time = new int[n];
+        int[] Completion_time = new int[n];
+        int[] Turnaround_time = new int[n];
+        int[] Waiting_time = new int[n];
+        int[] Response_time = new int[n];
+        int[] Energy_usage = new int[n];  // Energy usage of each process
+        int[] Time_quantum = new int[n];  // Time quantum for each process
         boolean[] isFirstResponse = new boolean[n];
 
-        // Input process details
+        // Step 3: Input details for each process (Arrival time, Burst time, and Energy usage)
         for (int i = 0; i < n; i++) {
-            processId[i] = i + 1;
-            System.out.print("Enter arrival time of P" + processId[i] + ": ");
-            arrivalTime[i] = sc.nextInt();
-            System.out.print("Enter burst time of P" + processId[i] + ": ");
-            burstTime[i] = sc.nextInt();
-            remainingTime[i] = burstTime[i];
+            Process_id[i] = i + 1;
+            System.out.print("Enter arrival time of P" + Process_id[i] + ": ");
+            Arrival_time[i] = sc.nextInt();
+            System.out.print("Enter burst time of P" + Process_id[i] + ": ");
+            Burst_time[i] = sc.nextInt();
+            System.out.print("Enter energy usage (1-10) for P" + Process_id[i] + ": ");
+            Energy_usage[i] = sc.nextInt();
+            Remaining_burst_time[i] = Burst_time[i];
             isFirstResponse[i] = true;
 
-            if (useEnergy) {
-                System.out.print("Enter energy usage of P" + processId[i] + " (1-10, where 1 is lowest power, 10 is highest power): ");
-                energyUsage[i] = sc.nextInt();
-            } else {
-                energyUsage[i] = 0; // Not used if energy mode is off
-            }
+            // Calculate the time quantum for each process based on energy usage
+            Time_quantum[i] = getDynamicTimeSlice(Energy_usage[i]);
         }
 
+        // Step 4: Process scheduling logic using Round Robin
         Queue<Integer> queue = new LinkedList<>();
         int currentTime = 0, completed = 0;
         boolean[] isInQueue = new boolean[n];
 
         while (completed < n) {
-            // Add arriving processes to queue
+            // Add processes to the queue based on arrival time and remaining burst time
             for (int i = 0; i < n; i++) {
-                if (arrivalTime[i] <= currentTime && !isInQueue[i] && remainingTime[i] > 0) {
+                if (Arrival_time[i] <= currentTime && !isInQueue[i] && Remaining_burst_time[i] > 0) {
                     queue.add(i);
                     isInQueue[i] = true;
                 }
             }
 
+            // If the queue is empty, just increment time
             if (queue.isEmpty()) {
                 currentTime++;
                 continue;
             }
 
+            // Process execution
             int idx = queue.poll();
 
             if (isFirstResponse[idx]) {
-                responseTime[idx] = currentTime - arrivalTime[idx];
+                Response_time[idx] = currentTime - Arrival_time[idx];
                 isFirstResponse[idx] = false;
             }
 
-            // Determine time quantum based on energy usage (if enabled)
-            int quantum = useEnergy ? getDynamicTimeSlice(energyUsage[idx]) : timeQuantum;
-            int execTime = Math.min(quantum, remainingTime[idx]);
-
-            System.out.println("\nExecuting Process P" + processId[idx] + " | Time Slice: " + execTime
-                    + (useEnergy ? " (Energy Aware)" : " (Fixed)"));
-
+            // Calculate the execution time for the current process
+            int execTime = Math.min(Time_quantum[idx], Remaining_burst_time[idx]);
             currentTime += execTime;
-            remainingTime[idx] -= execTime;
+            Remaining_burst_time[idx] -= execTime;
 
-            // Add new arriving processes to queue
-            for (int i = 0; i < n; i++) {
-                if (arrivalTime[i] <= currentTime && !isInQueue[i] && remainingTime[i] > 0) {
-                    queue.add(i);
-                    isInQueue[i] = true;
-                }
-            }
-
-            if (remainingTime[idx] > 0) {
+            // Requeue the process if it is not finished
+            if (Remaining_burst_time[idx] > 0) {
                 queue.add(idx);
             } else {
-                completionTime[idx] = currentTime;
-                turnaroundTime[idx] = completionTime[idx] - arrivalTime[idx];
-                waitingTime[idx] = turnaroundTime[idx] - burstTime[idx];
+                // Process has completed
+                Completion_time[idx] = currentTime;
+                Turnaround_time[idx] = Completion_time[idx] - Arrival_time[idx];
+                Waiting_time[idx] = Turnaround_time[idx] - Burst_time[idx];
                 completed++;
             }
         }
 
-        // Display the result
-        System.out.println("\nProcess\tAT\tBT\tCT\tTAT\tWT\tRT");
+        // Step 5: Display the results in a table format
+        System.out.println("\nProcess\tAT\tBT\tEnergy Usage\tTime Quantum\tCT\tTAT\tWT\tRT");
         for (int i = 0; i < n; i++) {
-            System.out.println("P" + processId[i] + "\t" + arrivalTime[i] + "\t" + burstTime[i] + "\t"
-                    + completionTime[i] + "\t" + turnaroundTime[i] + "\t" + waitingTime[i] + "\t" + responseTime[i]);
+            System.out.println("P" + Process_id[i] + "\t" + Arrival_time[i] + "\t" + Burst_time[i] + "\t" + Energy_usage[i] + "\t\t" + Time_quantum[i] + "\t\t" + Completion_time[i] + "\t" + Turnaround_time[i] + "\t" + Waiting_time[i] + "\t" + Response_time[i]);
         }
 
         sc.close();
-    }
-
-    // Function to determine dynamic time quantum based on energy usage
-    public static int getDynamicTimeSlice(int energyUsage) {
-        if (energyUsage <= 2) return 6; // Low energy usage → Longer time slice
-        if (energyUsage <= 5) return 4; // Medium energy usage → Normal time slice
-        return 2; // High energy usage → Shorter time slice
     }
 }
