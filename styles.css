@@ -1,10 +1,23 @@
-/* General styles */
+ /* General styles */
 body {
     font-family: 'Poppins', sans-serif;
     background: linear-gradient(to right, black, #acb6e5);
     margin: 0;
     padding: 20px;
     transition: background 0.5s ease-in-out;
+}
+
+/* Big Heading Styles */
+.big-heading {
+    text-align: center;
+    padding: 20px;
+    background: linear-gradient(to right, #ff7e5f, #feb47b);
+    color: white;
+    font-size: 28px;
+    font-weight: bold;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 }
 
 /* Container styles */
@@ -192,4 +205,3 @@ table tbody tr:hover {
         transform: translateY(0);
     }
 }
-
