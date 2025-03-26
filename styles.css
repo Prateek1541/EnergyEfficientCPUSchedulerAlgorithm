@@ -1,56 +1,56 @@
-/* General Styles */
+/* General styles */
 body {
     font-family: 'Poppins', sans-serif;
-    background: linear-gradient(to right, #6dd5ed, #2193b0);
+    background: linear-gradient(to right, black, #acb6e5);
     margin: 0;
     padding: 20px;
     transition: background 0.5s ease-in-out;
 }
 
-/* Main Container */
-.main-container {
+/* Container styles */
+.container {
     max-width: 900px;
-    margin: auto;
-    background: rgba(255, 255, 255, 0.96);
+    margin: 0 auto;
+    background: rgba(255, 255, 255, 0.95);
     border-radius: 12px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
     padding: 30px;
     animation: fadeIn 1s ease-in-out;
 }
 
-/* Header Styling */
-header {
+/* Header styling */
+.header {
     text-align: center;
     margin-bottom: 30px;
 }
 
-header h1 {
+.header h1 {
     font-weight: 700;
     font-size: 28px;
     color: #333;
 }
 
-header p {
-    color: #555;
-    font-size: 16px;
+.header p {
+    color: #666;
     font-weight: 400;
+    font-size: 16px;
 }
 
-/* Form Section */
-.config-section {
+/* Input section styles */
+.form-container {
+    margin-bottom: 20px;
     background: #f9f9f9;
-    padding: 20px;
+    padding: 15px;
     border-radius: 8px;
     box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
-    margin-bottom: 20px;
 }
 
 label {
     display: block;
     font-weight: 500;
+    margin-bottom: 8px;
     font-size: 14px;
     color: #333;
-    margin-bottom: 8px;
 }
 
 input[type="number"],
@@ -60,8 +60,14 @@ input[type="checkbox"] {
     border: 2px solid #ccc;
     border-radius: 8px;
     font-size: 14px;
-    margin-bottom: 15px;
+    margin-bottom: 20px;
     transition: all 0.3s ease-in-out;
+}
+
+input[type="checkbox"] {
+    width: auto;
+    display: inline-block;
+    margin-left: 10px;
 }
 
 input[type="number"]:focus {
@@ -70,15 +76,12 @@ input[type="number"]:focus {
     box-shadow: 0 0 8px rgba(0, 123, 255, 0.3);
 }
 
-.checkbox-label {
+.checkbox-container {
+    margin-top: 10px;
     display: flex;
     align-items: center;
-    gap: 10px;
-    font-size: 14px;
-    font-weight: 500;
 }
 
-/* Buttons */
 button.btn {
     width: 100%;
     padding: 12px;
@@ -97,37 +100,38 @@ button.btn:hover {
     transform: scale(1.02);
 }
 
-/* Dynamic Input Section */
-.process-inputs {
+/* Hidden elements */
+.hidden {
+    display: none;
+}
+
+/* Dynamic inputs */
+.dynamic-inputs {
     margin-top: 20px;
 }
 
 .process-input {
+    margin-bottom: 20px;
     display: flex;
+    justify-content: space-between;
     gap: 10px;
-    margin-bottom: 15px;
 }
 
 .process-input input {
-    width: 50%;
+    width: 48%;
 }
 
-/* Table Styles */
-.results {
+/* Table styles */
+.table-container {
     margin-top: 30px;
-}
-
-.results h2 {
-    text-align: center;
-    font-size: 22px;
-    color: #333;
+    overflow-x: auto;
 }
 
 table {
     width: 100%;
     border-collapse: collapse;
     font-size: 14px;
-    margin-top: 15px;
+    margin-bottom: 20px;
     border-radius: 8px;
     overflow: hidden;
 }
@@ -139,7 +143,7 @@ table th, table td {
 }
 
 table th {
-    background: linear-gradient(to right, black, #007BFF);
+    background: linear-gradient(to right, black, #acb6e5);
     color: #fff;
     font-weight: 600;
     text-transform: uppercase;
@@ -151,30 +155,26 @@ table td {
 }
 
 table tr:nth-child(even) td {
-    background-color: #f1f1f1;
+    background-color: #fafafa;
 }
 
+/* Hover effect on rows */
 table tbody tr:hover {
     background: rgba(0, 123, 255, 0.1);
     transition: background 0.3s ease-in-out;
 }
 
-/* Performance Metrics */
-.metrics {
+/* Metrics container */
+.metrics-container {
+    margin-top: 30px;
     text-align: center;
-    background: rgba(255, 255, 255, 0.9);
+    background: rgba(255, 255, 255, 0.8);
     padding: 15px;
     border-radius: 8px;
     box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
-    margin-top: 30px;
 }
 
-.metrics h2 {
-    font-size: 20px;
-    color: #333;
-}
-
-.metrics div {
+.metrics-container div {
     font-size: 16px;
     color: #333;
     margin-bottom: 10px;
@@ -192,3 +192,4 @@ table tbody tr:hover {
         transform: translateY(0);
     }
 }
+
