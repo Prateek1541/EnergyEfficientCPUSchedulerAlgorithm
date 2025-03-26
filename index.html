@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Energy-Efficient Round Robin Scheduling</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <div class="main-container">
+        <header>
+            <h1>Energy-Efficient Round Robin Scheduler</h1>
+            <p>A scheduling algorithm optimized for power consumption.</p>
+        </header>
+
+        <!-- Process Configuration -->
+        <section class="config-section">
+            <label for="numProcesses">Number of Processes:</label>
+            <input type="number" id="numProcesses" min="1" placeholder="Enter number of processes" required>
+
+            <label for="timeQuantum">Time Quantum:</label>
+            <input type="number" id="timeQuantum" placeholder="Time Quantum" required>
+
+            <label for="useEnergy" class="checkbox-label">
+                <input type="checkbox" id="useEnergy"> Enable Energy Efficiency
+            </label>
+
+            <button id="generateInputsBtn" class="btn">Create Process Inputs</button>
+        </section>
+
+        <!-- Dynamic Input Fields -->
+        <section id="processInputs" class="process-inputs"></section>
+
+        <!-- Start Simulation -->
+        <button id="submitBtn" class="btn">Run Simulation</button>
+
+        <!-- Results Table -->
+        <section class="results">
+            <h2>Scheduling Results</h2>
+            <table id="processTable">
+                <thead>
+                    <tr>
+                        <th>Process</th>
+                        <th>Arrival</th>
+                        <th>Burst</th>
+                        <th>Completion</th>
+                        <th>Turnaround</th>
+                        <th>Waiting</th>
+                        <th>Response</th>
+                        <th>Energy</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </section>
+
+        <!-- Performance Metrics -->
+        <section class="metrics">
+            <h2>Performance Metrics</h2>
+            <div id="totalEnergyUsage"></div>
+            <div id="cpuUtilization"></div>
+        </section>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
