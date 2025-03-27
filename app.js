@@ -187,3 +187,8 @@ function updateUI(processData, totalEnergyUsage, totalCPUTime, totalExecutionTim
     document.getElementById('totalExecutionTime').innerText = `Total Execution Time: ${totalExecutionTime}`;
     document.getElementById('cpuUtilization').innerText = `CPU Utilization: ${cpuUtilization.toFixed(2)}%`;
 }
+
+// Dark Mode Toggle Functionality
+document.getElementById('darkModeToggle').addEventListener('change', function() {
+    document.body.classList.toggle('dark-mode');
+});

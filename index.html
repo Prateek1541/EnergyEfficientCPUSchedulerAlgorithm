@@ -8,9 +8,17 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <!-- New Big Heading -->
+    <!-- Dark Mode Toggle -->
+    <div class="dark-mode-toggle">
+        <label class="switch">
+            <input type="checkbox" id="darkModeToggle">
+            <span class="slider round"></span>
+        </label>
+        <p>Dark Mode</p>
+    </div>
+
     <div class="big-heading">
-        <h1>Energy Efficient CPU Scheduler Algorithm</h1>
+        Energy Efficient CPU Scheduler Algorithm
     </div>
 
     <div class="container">
@@ -25,7 +33,9 @@
             <input type="number" id="numProcesses" placeholder="Enter number of processes" min="1" required>
 
             <div class="checkbox-container">
-                <label for="useEnergy">Use Energy Efficiency:<input type="checkbox" id="useEnergy"></label>
+                <label for="useEnergy">Use Energy Efficiency:
+                    <input type="checkbox" id="useEnergy">
+                </label>
             </div>
 
             <button id="generateInputsBtn" class="btn">Generate Process Inputs</button>
@@ -68,6 +78,22 @@
             <div id="totalCPUTime"></div>
             <div id="totalExecutionTime"></div>
             <div id="cpuUtilization"></div>
+        </div>
+
+        <!-- Team Section -->
+        <div class="team-section">
+            <h2>Meet the Team</h2>
+            <div class="team-container">
+                <div class="team-member">
+                    <h3>Prateek Tripathi</h3>
+                </div>
+                <div class="team-member">
+                    <h3>Vikas Kumar Yadav</h3>
+                </div>
+                <div class="team-member">
+                    <h3>Harshit</h3>
+                </div>
+            </div>
         </div>
     </div>
 
