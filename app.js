@@ -16,19 +16,16 @@ function generateProcessInputs(numProcesses, useEnergy) {
     const processInputsDiv = document.getElementById('processInputs');
     processInputsDiv.innerHTML = ''; // Clear any existing inputs
 
-    // Create the input fields for each process
     for (let i = 0; i < numProcesses; i++) {
         const processDiv = document.createElement('div');
         processDiv.classList.add('process-input');
 
-        // Create the Arrival Time input
         const arrivalTimeInput = document.createElement('input');
         arrivalTimeInput.type = 'number';
         arrivalTimeInput.placeholder = `Arrival Time for P${i + 1}`;
         arrivalTimeInput.id = `arrivalTime${i}`;
         arrivalTimeInput.required = true;
 
-        // Create the Burst Time input
         const burstTimeInput = document.createElement('input');
         burstTimeInput.type = 'number';
         burstTimeInput.placeholder = `Burst Time for P${i + 1}`;
@@ -38,7 +35,6 @@ function generateProcessInputs(numProcesses, useEnergy) {
         processDiv.appendChild(arrivalTimeInput);
         processDiv.appendChild(burstTimeInput);
 
-        // Add Energy usage input if energy efficiency is enabled
         if (useEnergy) {
             const energyUsageInput = document.createElement('input');
             energyUsageInput.type = 'number';
@@ -51,7 +47,6 @@ function generateProcessInputs(numProcesses, useEnergy) {
         processInputsDiv.appendChild(processDiv);
     }
 
-    // Show or hide time quantum input
     const timeQuantumDiv = document.getElementById('timeQuantumInput');
     if (!useEnergy) {
         timeQuantumDiv.classList.remove('hidden');
@@ -83,7 +78,8 @@ document.getElementById('submitBtn').addEventListener('click', function() {
             turnaroundTime: 0,
             waitingTime: 0,
             responseTime: 0,
-            isInQueue: false
+            isInQueue: false,
+            assignedTimeQuantum: useEnergy ? getDynamicTimeSlice(energyUsage) : timeQuantum
         });
     }
 
@@ -92,11 +88,11 @@ document.getElementById('submitBtn').addEventListener('click', function() {
         return;
     }
 
-    simulateRoundRobin(processData, useEnergy, timeQuantum);
+    simulateRoundRobin(processData, useEnergy);
 });
 
 // Simulate Round Robin Scheduling
-function simulateRoundRobin(processData, useEnergy, timeQuantum) {
+function simulateRoundRobin(processData, useEnergy) {
     const queue = [];
     let currentTime = 0;
     let completed = 0;
@@ -126,8 +122,7 @@ function simulateRoundRobin(processData, useEnergy, timeQuantum) {
             process.isFirstResponse = false;
         }
 
-        const execTime = useEnergy ? getDynamicTimeSlice(process.energyUsage) : timeQuantum;
-        const actualExecTime = Math.min(execTime, process.remainingTime);
+        const actualExecTime = Math.min(process.assignedTimeQuantum, process.remainingTime);
 
         totalEnergyUsage += process.energyUsage * actualExecTime;
         totalCPUTime += actualExecTime;
@@ -179,7 +174,7 @@ function updateUI(processData, totalEnergyUsage, totalCPUTime, totalExecutionTim
         row.insertCell(4).innerText = process.turnaroundTime;
         row.insertCell(5).innerText = process.waitingTime;
         row.insertCell(6).innerText = process.responseTime;
-        row.insertCell(7).innerText = process.isInQueue ? "Dynamic" : "Fixed";
+        row.insertCell(7).innerText = process.assignedTimeQuantum;
     });
 
     document.getElementById('totalEnergyUsage').innerText = `Total Energy Usage: ${totalEnergyUsage}`;
